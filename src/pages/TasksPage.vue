@@ -6,10 +6,10 @@
                     <!-- Add new Task -->
 
                     <!-- List of uncompleted tasks -->  
-
-                    <ul class="list-group list-group-flush">
-                        <Task v-for="task in tasks" :key="task.id" :task="task" />
-                    </ul>
+                    <Tasks :tasks="uncompletedTask" />
+                    
+                    <!-- list of completed tasks -->
+                    <Tasks :tasks="completedTask" />
 
                     <!-- show toggle button -->
                     <div class="text-center my-3" >
@@ -20,7 +20,6 @@
                         </button>
                     </div>
 
-                    <!-- list of completed tasks -->
                     
                 </div>
             </div>
@@ -28,9 +27,9 @@
     </main>
 </template>
 <script setup>
-    import { onMounted, ref } from 'vue'
+    import { onMounted, ref, computed } from 'vue'
     import { allTask } from '../http/task-api'
-    import Task from '../components/tasks/Task.vue'
+    import Tasks from '../components/tasks/Tasks.vue'
 
     const tasks = ref([]);
 
@@ -39,5 +38,8 @@
         tasks.value = data.data;
         console.log(tasks)
     })
+
+    const uncompletedTask = computed(() => tasks.value.filter(task => !task.is_completed))
+    const completedTask = computed(() => tasks.value.filter(task => task.is_completed))
 
 </script>
